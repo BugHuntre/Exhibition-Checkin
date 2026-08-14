@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Exhibition Check-In</title>
+
+  <script src="https://unpkg.com/html5-qrcode"></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      text-align: center;
+    }
+
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 25px;
+      border-radius: 20px;
+    }
+
+    h1 {
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      color: #777;
+      margin-bottom: 25px;
+    }
+
+    #reader {
+      width: 100%;
+    }
+
+    #result {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 12px;
+      display: none;
+    }
+
+    .success {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .error {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .name {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .id {
+      font-weight: bold;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>EXHIBITION 2026</h1>
+
+  <div class="subtitle">
+    Visitor Check-In
+  </div>
+
+  <div id="reader"></div>
+
+  <div id="result"></div>
+
+</div>
+
+<script>
+
+const APPS_SCRIPT_URL =
+  "https://script.google.com/macros/s/AKfycbzJXSgeFsAJmuvztxMf0qOKj6PRxBMoAsUrhHkJeBNxbJfVfnGPcnjAgbB9SH2Jd4Z-/exec";
+let scanner;
+
+function showResult(data) {
+
+  const result = document.getElementById("result");
+
+  result.style.display = "block";
+
+  if (data.success) {
+
+    result.className = "success";
+
+    result.innerHTML = `
+      <div class="name">${data.name}</div>
+      <div class="id">${data.id}</div>
+      <div>${data.phone}</div>
+      <br>
+      <strong>CHECK-IN SUCCESSFUL</strong>
+    `;
+
+  } else {
+
+    result.className = "error";
+
+    result.innerHTML = `
+      <div class="name">${data.message}</div>
+      <div class="id">${data.id || ""}</div>
+    `;
+  }
+}
+
+
+async function checkIn(visitorID) {
+
+  try {
+
+    const response = await fetch(
+      APPS_SCRIPT_URL + "?checkin=" +
+      encodeURIComponent(visitorID)
+    );
+
+    const data = await response.json();
+
+    showResult(data);
+
+  } catch (error) {
+
+    showResult({
+      success: false,
+      message: "SYSTEM ERROR",
+      id: visitorID
+    });
+
+  }
+
+}
+
+
+function onScanSuccess(decodedText) {
+
+  scanner.clear();
+
+  checkIn(decodedText);
+
+}
+
+
+scanner = new Html5Qrcode("reader");
+
+scanner.start(
+  { facingMode: "environment" },
+  {
+    fps: 10,
+    qrbox: {
+      width: 250,
+      height: 250
+    }
+  },
+  onScanSuccess
+);
+
+</script>
+
+</body>
+</html>
