@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
 
   <title>Exhibition Check-In</title>
 
-  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 
   <style>
+
     body {
       margin: 0;
       padding: 20px;
@@ -31,11 +35,22 @@
 
     .subtitle {
       color: #777;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
 
-    #reader {
+    #video {
       width: 100%;
+      border-radius: 15px;
+      background: black;
+    }
+
+    #canvas {
+      display: none;
+    }
+
+    #status {
+      margin-top: 15px;
+      font-weight: bold;
     }
 
     #result {
@@ -64,7 +79,9 @@
       font-weight: bold;
       margin: 10px 0;
     }
+
   </style>
+
 </head>
 
 <body>
@@ -77,45 +94,158 @@
     Visitor Check-In
   </div>
 
-  <div id="reader"></div>
+  <video id="video"
+         autoplay
+         playsinline>
+  </video>
+
+  <canvas id="canvas"></canvas>
+
+  <div id="status">
+    Starting camera...
+  </div>
 
   <div id="result"></div>
 
 </div>
 
+
 <script>
 
 const APPS_SCRIPT_URL =
-  "https://script.google.com/macros/s/AKfycbzJXSgeFsAJmuvztxMf0qOKj6PRxBMoAsUrhHkJeBNxbJfVfnGPcnjAgbB9SH2Jd4Z-/exec";
-let scanner;
+"https://script.google.com/macros/s/AKfycbzJXSgeFsAJmuvztxMf0qOKj6PRxBMoAsUrhHkJeBNxbJfVfnGPcnjAgbB9SH2Jd4Z-/exec";
 
-function showResult(data) {
 
-  const result = document.getElementById("result");
+const video =
+document.getElementById("video");
 
-  result.style.display = "block";
+const canvas =
+document.getElementById("canvas");
 
-  if (data.success) {
+const context =
+canvas.getContext("2d");
 
-    result.className = "success";
 
-    result.innerHTML = `
-      <div class="name">${data.name}</div>
-      <div class="id">${data.id}</div>
-      <div>${data.phone}</div>
-      <br>
-      <strong>CHECK-IN SUCCESSFUL</strong>
-    `;
+const status =
+document.getElementById("status");
 
-  } else {
 
-    result.className = "error";
+const result =
+document.getElementById("result");
 
-    result.innerHTML = `
-      <div class="name">${data.message}</div>
-      <div class="id">${data.id || ""}</div>
-    `;
+
+let scanning = true;
+
+
+async function startCamera() {
+
+  try {
+
+    const stream =
+      await navigator.mediaDevices.getUserMedia({
+
+        video: {
+          facingMode: {
+            ideal: "environment"
+          }
+        },
+
+        audio: false
+
+      });
+
+
+    video.srcObject = stream;
+
+    status.innerText =
+      "Point the camera at the visitor QR code.";
+
+    requestAnimationFrame(scanQR);
+
   }
+
+  catch(error) {
+
+    status.innerText =
+      "Camera permission denied.";
+
+    console.error(error);
+
+  }
+
+}
+
+
+function scanQR() {
+
+  if (!scanning) {
+    return;
+  }
+
+
+  if (video.readyState === video.HAVE_ENOUGH_DATA) {
+
+    canvas.width =
+      video.videoWidth;
+
+    canvas.height =
+      video.videoHeight;
+
+
+    context.drawImage(
+      video,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
+
+
+    const imageData =
+      context.getImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+
+
+    const code =
+      jsQR(
+        imageData.data,
+        imageData.width,
+        imageData.height,
+        {
+          inversionAttempts:
+            "attemptBoth"
+        }
+      );
+
+
+    if (code) {
+
+      console.log(
+        "QR DETECTED:",
+        code.data
+      );
+
+
+      scanning = false;
+
+      status.innerText =
+        "QR detected! Checking visitor...";
+
+      checkIn(code.data);
+
+      return;
+
+    }
+
+  }
+
+
+  requestAnimationFrame(scanQR);
+
 }
 
 
@@ -123,21 +253,36 @@ async function checkIn(visitorID) {
 
   try {
 
-    const response = await fetch(
-      APPS_SCRIPT_URL + "?checkin=" +
-      encodeURIComponent(visitorID)
-    );
+    const response =
+      await fetch(
+        APPS_SCRIPT_URL +
+        "?checkin=" +
+        encodeURIComponent(visitorID)
+      );
 
-    const data = await response.json();
+
+    const data =
+      await response.json();
+
 
     showResult(data);
 
-  } catch (error) {
+  }
+
+  catch(error) {
+
+    console.error(error);
 
     showResult({
+
       success: false,
-      message: "SYSTEM ERROR",
-      id: visitorID
+
+      message:
+        "SYSTEM ERROR",
+
+      id:
+        visitorID
+
     });
 
   }
@@ -145,42 +290,74 @@ async function checkIn(visitorID) {
 }
 
 
-function onScanSuccess(decodedText) {
+function showResult(data) {
 
-  scanner.clear();
+  result.style.display =
+    "block";
 
-  checkIn(decodedText);
+
+  if (data.success) {
+
+    result.className =
+      "success";
+
+
+    result.innerHTML = `
+
+      <div class="name">
+        ${data.name}
+      </div>
+
+      <div class="id">
+        ${data.id}
+      </div>
+
+      <div>
+        ${data.phone}
+      </div>
+
+      <br>
+
+      <strong>
+        CHECK-IN SUCCESSFUL
+      </strong>
+
+    `;
+
+
+    status.innerText =
+      "Visitor checked in successfully.";
+
+  }
+
+  else {
+
+    result.className =
+      "error";
+
+
+    result.innerHTML = `
+
+      <div class="name">
+        ${data.message}
+      </div>
+
+      <div class="id">
+        ${data.id || ""}
+      </div>
+
+    `;
+
+
+    status.innerText =
+      "Scan another QR code.";
+
+  }
 
 }
 
 
-scanner = new Html5Qrcode("reader");
-
-scanner.start(
-  { facingMode: "environment" },
-  {
-    fps: 15,
-    qrbox: {
-      width: 300,
-      height: 300
-    },
-    aspectRatio: 1.0,
-    disableFlip: false
-  },
-  function(decodedText) {
-
-    console.log("QR DETECTED:", decodedText);
-
-    onScanSuccess(decodedText);
-
-  },
-  function(errorMessage) {
-
-    // Ignore normal scanning errors
-    console.log("Scanning...");
-
-  }
-);
+startCamera();
 
 </script>
 
