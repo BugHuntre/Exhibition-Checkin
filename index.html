@@ -159,13 +159,27 @@ scanner = new Html5Qrcode("reader");
 scanner.start(
   { facingMode: "environment" },
   {
-    fps: 10,
+    fps: 15,
     qrbox: {
-      width: 250,
-      height: 250
-    }
+      width: 300,
+      height: 300
+    },
+    aspectRatio: 1.0,
+    disableFlip: false
   },
-  onScanSuccess
+  function(decodedText) {
+
+    console.log("QR DETECTED:", decodedText);
+
+    onScanSuccess(decodedText);
+
+  },
+  function(errorMessage) {
+
+    // Ignore normal scanning errors
+    console.log("Scanning...");
+
+  }
 );
 
 </script>
