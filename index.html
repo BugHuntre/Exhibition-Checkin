@@ -7,9 +7,10 @@
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
 
-  <title>The May Fair Show — Check-In</title>
+  <title>THE MAYFAIR SHOW — Check-In</title>
 
   <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
+
 
   <style>
 
@@ -17,235 +18,563 @@
       box-sizing: border-box;
     }
 
+
     body {
+
       margin: 0;
+
       min-height: 100vh;
-      padding: 20px;
 
-      font-family: Georgia, "Times New Roman", serif;
+      padding: 20px 15px;
 
-      background:
-        linear-gradient(
-          135deg,
-          #f5f1e8,
-          #e9e4d6
-        );
+      background: #eee9dd;
 
       color: #24201b;
 
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
       display: flex;
+
       justify-content: center;
-      align-items: center;
+
+      align-items: flex-start;
+
     }
 
-    .container {
+
+    /* =========================
+       PAGE
+       ========================= */
+
+    .page {
+
       width: 100%;
-      max-width: 520px;
 
-      background: #ffffff;
+      max-width: 560px;
 
-      border: 1px solid #d8d0bd;
+    }
 
-      box-shadow:
-        0 12px 40px rgba(0,0,0,0.12);
 
-      border-radius: 6px;
+    /* =========================
+       MAIN CARD
+       ========================= */
+
+    .card {
+
+      width: 100%;
+
+      background: #fffdf9;
+
+      border: 1px solid #bfb49f;
+
+      border-radius: 5px;
 
       overflow: hidden;
+
+      box-shadow:
+        0 10px 30px
+        rgba(0,0,0,.10);
+
     }
 
 
-    /* HEADER */
+    /* =========================
+       HEADER
+       ========================= */
 
     .header {
+
       text-align: center;
 
-      padding: 28px 20px 18px;
+      padding:
+        42px
+        25px
+        32px;
 
-      border-bottom: 1px solid #d8d0bd;
+      border-bottom:
+        1px solid #cfc6b3;
+
     }
+
 
     .title {
-      font-size: clamp(34px, 9vw, 58px);
-
-      line-height: 0.95;
-
-      font-weight: 500;
-
-      letter-spacing: -2px;
 
       margin: 0;
+
+      font-size:
+        clamp(
+          38px,
+          8vw,
+          58px
+        );
+
+      line-height: .88;
+
+      font-weight: 400;
+
+      letter-spacing: -2.5px;
+
+      color: #171515;
+
     }
 
-    .curated {
-      margin-top: 20px;
 
-      font-size: 18px;
+    .header-divider {
+
+      width: 78%;
+
+      height: 1px;
+
+      margin:
+        24px auto
+        20px;
+
+      background: #788047;
+
+      position: relative;
+
+    }
+
+
+    .header-divider::after {
+
+      content: "◇";
+
+      position: absolute;
+
+      left: 50%;
+
+      top: 50%;
+
+      transform:
+        translate(-50%, -50%);
+
+      background: #fffdf9;
+
+      padding: 0 9px;
 
       color: #788047;
 
-      letter-spacing: 0.5px;
+      font-size: 14px;
+
     }
 
-    .year {
-      margin-top: 8px;
 
-      font-family: Arial, sans-serif;
+    .curated {
+
+      font-size: 17px;
+
+      color: #788047;
+
+      line-height: 1.3;
+
+      margin-bottom: 12px;
+
+    }
+
+
+    .luxe {
+
+      font-size: 27px;
+
+      font-style: italic;
+
+      color: #788047;
+
+      letter-spacing: .7px;
+
+      line-height: 1.1;
+
+    }
+
+
+    /* =========================
+       CHECK-IN CONTENT
+       ========================= */
+
+    .content {
+
+      padding:
+        35px
+        35px
+        32px;
+
+      text-align: center;
+
+    }
+
+
+    .heading {
+
+      margin: 0;
+
+      font-size: 27px;
+
+      font-weight: 400;
+
+      letter-spacing: 3px;
+
+      color: #66703a;
+
+    }
+
+
+    /* =========================
+       ORNAMENT
+       ========================= */
+
+    .ornament {
+
+      width: 170px;
+
+      margin:
+        14px auto
+        20px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      color: #788047;
+
+    }
+
+
+    .ornament::before,
+    .ornament::after {
+
+      content: "";
+
+      height: 1px;
+
+      background: #788047;
+
+      flex: 1;
+
+    }
+
+
+    .ornament span {
+
+      padding: 0 9px;
 
       font-size: 14px;
 
-      letter-spacing: 4px;
-
-      color: #77705f;
     }
 
 
-    /* CHECK-IN AREA */
+    /* =========================
+       CAMERA
+       ========================= */
 
-    .checkin {
-      padding: 25px 25px 30px;
+    .scanner-frame {
 
-      text-align: center;
-    }
+      width: 100%;
 
-    .heading {
-      font-family: Arial, sans-serif;
+      padding: 8px;
 
-      font-size: 22px;
+      background: #f7f4ec;
 
-      font-weight: bold;
+      border:
+        1px solid #d2c8b6;
 
-      letter-spacing: 1px;
+      border-radius: 4px;
 
-      margin-bottom: 18px;
     }
 
 
     #video {
+
       width: 100%;
 
       display: block;
 
       background: #111;
 
-      border-radius: 8px;
+      border-radius: 3px;
 
-      border: 4px solid #e2dccd;
     }
 
 
     #canvas {
+
       display: none;
+
     }
 
+
+    /* =========================
+       STATUS
+       ========================= */
 
     #status {
+
       margin-top: 18px;
 
-      font-family: Arial, sans-serif;
+      font-family:
+        Arial,
+        sans-serif;
 
-      font-size: 15px;
+      font-size: 13px;
 
-      color: #666;
+      color: #77705f;
+
+      line-height: 1.4;
+
     }
 
 
-    /* RESULT */
+    /* =========================
+       RESULT
+       ========================= */
 
     #result {
+
       display: none;
 
-      margin-top: 20px;
+      margin-top: 18px;
 
-      padding: 24px;
+      padding: 22px;
 
-      border-radius: 8px;
+      border-radius: 4px;
 
-      font-family: Arial, sans-serif;
+      font-family:
+        Arial,
+        sans-serif;
+
     }
 
 
     .success {
+
       background: #edf3e8;
 
-      border: 1px solid #b9c9a8;
+      border:
+        1px solid #b9c9a8;
 
       color: #40502f;
+
     }
 
 
     .already {
+
       background: #fff4df;
 
-      border: 1px solid #d8b76b;
+      border:
+        1px solid #d8b76b;
 
       color: #795b18;
+
     }
 
 
     .error {
+
       background: #f8e9e9;
 
-      border: 1px solid #d6aaaa;
+      border:
+        1px solid #d6aaaa;
 
       color: #8b3030;
+
     }
 
 
     .name {
-      font-size: 27px;
 
-      font-weight: bold;
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+      font-size: 26px;
 
       margin-bottom: 8px;
+
     }
 
 
     .id {
-      font-size: 17px;
+
+      font-size: 15px;
 
       font-weight: bold;
 
       letter-spacing: 2px;
 
       margin: 8px 0;
+
     }
 
 
     .message {
-      font-size: 18px;
+
+      margin-top: 12px;
+
+      font-size: 16px;
 
       font-weight: bold;
 
-      margin-top: 12px;
     }
 
 
     .time {
-      margin-top: 10px;
 
-      font-size: 14px;
-
-      opacity: 0.8;
-    }
-
-
-    /* FOOTER */
-
-    .footer {
-      text-align: center;
-
-      padding: 15px;
-
-      border-top: 1px solid #d8d0bd;
-
-      font-family: Arial, sans-serif;
+      margin-top: 9px;
 
       font-size: 12px;
 
-      color: #77705f;
+      opacity: .8;
 
-      letter-spacing: 1px;
+    }
+
+
+    /* =========================
+       FOOTER
+       ========================= */
+
+    .footer {
+
+      border-top:
+        1px solid #cfc6b3;
+
+      padding: 14px;
+
+      text-align: center;
+
+      font-size: 12px;
+
+      letter-spacing: 2.5px;
+
+      color: #788047;
+
+    }
+
+
+    /* =========================
+       MOBILE
+       ========================= */
+
+    @media (max-width: 600px) {
+
+      body {
+
+        padding: 8px;
+
+        align-items: flex-start;
+
+      }
+
+
+      .page {
+
+        max-width: 560px;
+
+      }
+
+
+      .header {
+
+        padding:
+          30px
+          18px
+          25px;
+
+      }
+
+
+      .title {
+
+        font-size: 38px;
+
+        letter-spacing: -2px;
+
+      }
+
+
+      .header-divider {
+
+        width: 82%;
+
+        margin:
+          18px auto
+          15px;
+
+      }
+
+
+      .curated {
+
+        font-size: 13px;
+
+        margin-bottom: 9px;
+
+      }
+
+
+      .luxe {
+
+        font-size: 22px;
+
+      }
+
+
+      .content {
+
+        padding:
+          28px
+          20px
+          27px;
+
+      }
+
+
+      .heading {
+
+        font-size: 22px;
+
+        letter-spacing: 2px;
+
+      }
+
+
+      .ornament {
+
+        margin:
+          10px auto
+          17px;
+
+      }
+
+
+      .scanner-frame {
+
+        padding: 6px;
+
+      }
+
+
+      #status {
+
+        font-size: 12px;
+
+      }
+
+
+      .footer {
+
+        padding: 11px;
+
+        font-size: 10px;
+
+      }
+
     }
 
   </style>
@@ -256,112 +585,186 @@
 <body>
 
 
-<div class="container">
+<div class="page">
 
 
-  <div class="header">
+  <div class="card">
 
-    <h1 class="title">
+
+    <!-- =========================
+         HEADER
+         ========================= -->
+
+    <div class="header">
+
+      <h1 class="title">
+        THE MAYFAIR SHOW
+      </h1>
+
+
+      <div class="header-divider"></div>
+
+
+      <div class="curated">
+        Curated by Prakshi Gupta &amp; Raman Nagpal
+      </div>
+
+
+      <div class="luxe">
+        LUXE EDIT - LE MILL
+      </div>
+
+    </div>
+
+
+    <!-- =========================
+         CHECK-IN
+         ========================= -->
+
+    <div class="content">
+
+
+      <h2 class="heading">
+        VISITOR CHECK-IN
+      </h2>
+
+
+      <div class="ornament">
+
+        <span>✦</span>
+
+      </div>
+
+
+      <!-- CAMERA -->
+
+      <div class="scanner-frame">
+
+        <video
+          id="video"
+          autoplay
+          playsinline>
+        </video>
+
+      </div>
+
+
+      <canvas id="canvas"></canvas>
+
+
+      <div id="status">
+
+        Starting camera...
+
+      </div>
+
+
+      <!-- RESULT -->
+
+      <div id="result"></div>
+
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <div class="footer">
+
       THE MAYFAIR SHOW
-    </h1>
 
-    <div class="curated">
-      Curated by Prakshi Gupta &amp; Raman Nagpal
-    </div>
-
-    <div class="year">
-       LUXE EDIT - LE MILL
-    </div>
-
-  </div>
-
-
-  <div class="checkin">
-
-    <div class="heading">
-      VISITOR CHECK-IN
     </div>
 
 
-    <video id="video"
-           autoplay
-           playsinline>
-    </video>
-
-
-    <canvas id="canvas"></canvas>
-
-
-    <div id="status">
-      Starting camera...
-    </div>
-
-
-    <div id="result"></div>
-
-  </div>
-
-
-  <div class="footer">
-    PLEASE PRESENT YOUR ENTRY PASS
   </div>
 
 
 </div>
 
 
+
 <script>
 
+
+/* =========================
+   APPS SCRIPT
+   ========================= */
 
 const APPS_SCRIPT_URL =
 "https://script.google.com/macros/s/AKfycbzJXSgeFsAJmuvztxMf0qOKj6PRxBMoAsUrhHkJeBNxbJfVfnGPcnjAgbB9SH2Jd4Z-/exec";
 
 
+/* =========================
+   ELEMENTS
+   ========================= */
+
 const video =
-document.getElementById("video");
+  document.getElementById(
+    "video"
+  );
+
 
 const canvas =
-document.getElementById("canvas");
+  document.getElementById(
+    "canvas"
+  );
+
 
 const context =
-canvas.getContext("2d");
+  canvas.getContext(
+    "2d"
+  );
+
 
 const status =
-document.getElementById("status");
+  document.getElementById(
+    "status"
+  );
+
 
 const result =
-document.getElementById("result");
+  document.getElementById(
+    "result"
+  );
 
 
 let scanning = true;
 
+
+/* =========================
+   CAMERA
+   ========================= */
 
 async function startCamera() {
 
   try {
 
     const stream =
-      await navigator.mediaDevices.getUserMedia({
+      await navigator.mediaDevices
+        .getUserMedia({
 
-        video: {
-          facingMode: {
-            ideal: "environment"
-          }
-        },
+          video: {
+            facingMode: {
+              ideal: "environment"
+            }
+          },
 
-        audio: false
+          audio: false
 
-      });
+        });
 
 
-    video.srcObject = stream;
+    video.srcObject =
+      stream;
 
 
     status.innerText =
       "Point the camera at the visitor's QR code.";
 
 
-    requestAnimationFrame(scanQR);
+    requestAnimationFrame(
+      scanQR
+    );
 
   }
 
@@ -377,6 +780,10 @@ async function startCamera() {
 }
 
 
+/* =========================
+   QR SCANNER
+   ========================= */
+
 function scanQR() {
 
   if (!scanning) {
@@ -384,10 +791,14 @@ function scanQR() {
   }
 
 
-  if (video.readyState === video.HAVE_ENOUGH_DATA) {
+  if (
+    video.readyState ===
+    video.HAVE_ENOUGH_DATA
+  ) {
 
     canvas.width =
       video.videoWidth;
+
 
     canvas.height =
       video.videoHeight;
@@ -413,13 +824,18 @@ function scanQR() {
 
     const code =
       jsQR(
+
         imageData.data,
+
         imageData.width,
+
         imageData.height,
+
         {
           inversionAttempts:
             "attemptBoth"
         }
+
       );
 
 
@@ -427,11 +843,15 @@ function scanQR() {
 
       scanning = false;
 
+
       status.innerText =
         "QR detected — verifying visitor...";
 
 
-      checkIn(code.data);
+      checkIn(
+        code.data
+      );
+
 
       return;
 
@@ -440,20 +860,32 @@ function scanQR() {
   }
 
 
-  requestAnimationFrame(scanQR);
+  requestAnimationFrame(
+    scanQR
+  );
 
 }
 
 
-async function checkIn(visitorID) {
+/* =========================
+   CHECK-IN
+   ========================= */
+
+async function checkIn(
+  visitorID
+) {
 
   try {
 
     const response =
       await fetch(
+
         APPS_SCRIPT_URL +
         "?checkin=" +
-        encodeURIComponent(visitorID)
+        encodeURIComponent(
+          visitorID
+        )
+
       );
 
 
@@ -461,7 +893,9 @@ async function checkIn(visitorID) {
       await response.json();
 
 
-    showResult(data);
+    showResult(
+      data
+    );
 
   }
 
@@ -469,9 +903,12 @@ async function checkIn(visitorID) {
 
     console.error(error);
 
+
     showResult({
 
       success: false,
+
+      alreadyCheckedIn: false,
 
       message:
         "SYSTEM ERROR",
@@ -486,7 +923,13 @@ async function checkIn(visitorID) {
 }
 
 
-function showResult(data) {
+/* =========================
+   RESULT
+   ========================= */
+
+function showResult(
+  data
+) {
 
   result.style.display =
     "block";
@@ -494,7 +937,9 @@ function showResult(data) {
 
   /* SUCCESS */
 
-  if (data.success) {
+  if (
+    data.success
+  ) {
 
     result.className =
       "success";
@@ -510,10 +955,6 @@ function showResult(data) {
         ${data.id}
       </div>
 
-      <div>
-        ${data.phone}
-      </div>
-
       <div class="message">
         ✓ CHECK-IN SUCCESSFUL
       </div>
@@ -524,6 +965,7 @@ function showResult(data) {
     status.innerText =
       "Visitor successfully checked in.";
 
+
     return;
 
   }
@@ -531,7 +973,9 @@ function showResult(data) {
 
   /* ALREADY CHECKED IN */
 
-  if (data.alreadyCheckedIn) {
+  if (
+    data.alreadyCheckedIn
+  ) {
 
     result.className =
       "already";
@@ -552,7 +996,7 @@ function showResult(data) {
       </div>
 
       <div class="time">
-        This pass has already been used.
+        This entry pass has already been used.
       </div>
 
     `;
@@ -560,6 +1004,7 @@ function showResult(data) {
 
     status.innerText =
       "Duplicate entry detected.";
+
 
     return;
 
